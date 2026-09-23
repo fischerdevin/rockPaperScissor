@@ -13,11 +13,11 @@ public class Main {
 
             //Gate for only allowing R,r,S,s,P,p
             do {
-                System.out.println("Choose: Rock (R/r), Paper (P/p), Scissor (S/s)");
+                System.out.print("Choose: Rock (R/r), Paper (P/p), Scissor (S/s) => ");
                 playerSelection = scnr.next().toUpperCase().charAt(0);
 
                 if (new String(playableSelection).indexOf(playerSelection) == -1){
-                    System.out.println("Invalid Selection: Select Again");
+                    System.out.println("\nInvalid Selection: Select Again");
                 }
             }while (new String(playableSelection).indexOf(playerSelection) == -1);
 
@@ -29,7 +29,7 @@ public class Main {
 
 
             if (playerSelection == computerSelection) {
-                System.out.println("Draw");
+                System.out.println("Draw!");
                 drawCounter++;
             } else if (playerSelection == PAPER && computerSelection == ROCK ||
                     playerSelection == ROCK && computerSelection == SCISSOR ||
@@ -42,7 +42,7 @@ public class Main {
                 computerWins++;
             }
 
-            System.out.println("Game "+ gamePlayed +" Results: | Player wins: " + playerWins + " vs. Player losses: " + computerWins + " vs. Draws: " + drawCounter );
+            System.out.println("Game "+ gamePlayed +" Results: | Player wins: " + playerWins + " vs. Player losses: " + computerWins + " vs. Draws: " + drawCounter+"\n");
             gamePlayed++;
         }
     }
