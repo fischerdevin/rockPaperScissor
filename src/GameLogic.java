@@ -4,6 +4,9 @@ public class GameLogic {
     private int gamePlayed, totalRounds, wins, losses, draws;
     private final String validSelection = "RPS";
     private final Random random = new Random();
+    public enum Result{
+        WIN, LOSS, DRAW
+    }
 
     public GameLogic(){
         gamePlayed = 1;
@@ -21,38 +24,51 @@ public class GameLogic {
         draws = 0;
     }
 
-    public int getGamePlayed(){
+    public int getGamesPlayed(){
         return this.gamePlayed;
     }
     public int getTotalRounds(){
         return this.totalRounds;
     }
     public boolean isValid(char check){
-        return validSelection.indexOf(check) == -1;
+        return validSelection.indexOf(check) != -1;
     }
 
-    public void checkGame(char player){
-        final char ROCK = 'R', PAPER = 'P', SCISSOR = 'S';
-        char computer = validSelection.charAt(random.nextInt(validSelection.length()));
-        System.out.println("Game: " + this.gamePlayed + " | Player choice : Computer Choice => " + player + " : " + computer);
-
+    public Result checkGame(char player, char computer){
         if (player == computer) {
-            System.out.println("Draw!");
-            this.draws++;
-            gameStats();
-        } else if (player == PAPER && computer == ROCK ||
-                player == ROCK && computer == SCISSOR ||
-                player == SCISSOR && computer == PAPER) {
-            System.out.println("Player Wins!");
-            this.wins++;
-            gameStats();
+            return Result.DRAW;
+        } else if (player == 'P' && computer == 'R'
+                || player == 'R' && computer == 'S'
+                || player == 'S' && computer == 'P') {
+            return Result.WIN;
         } else {
-            System.out.println("Computer Wins!");
-            this.losses++;
-            gameStats();
-
+            return Result.LOSS;
         }
-        this.gamePlayed++;
+    }
+
+    public void playGame(char player){
+        char computer =  validSelection.charAt(random.nextInt(validSelection.length()));
+
+        System.out.println("Game: " + gamePlayed + " | Player choice : Computer Choice => " + player + " : " + computer);
+
+        Result result = checkGame(player,computer);
+
+        switch (result){
+            case WIN :
+                System.out.println("Win!");
+                wins++;
+                break;
+            case LOSS:
+                System.out.println("Loss!");
+                losses++;
+                break;
+            case DRAW:
+                System.out.println("Draw!");
+                draws++;
+                break;
+        }
+        gameStats();
+        gamePlayed++;
     }
 
     public void gameStats(){
