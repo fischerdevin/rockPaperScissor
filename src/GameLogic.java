@@ -1,9 +1,6 @@
-import java.util.Random;
-
 public class GameLogic {
     private int gamePlayed, totalRounds, wins, losses, draws;
     private final String validSelection = "RPS";
-    private final Random random = new Random();
     public enum Result{
         WIN, LOSS, DRAW
     }
@@ -46,13 +43,7 @@ public class GameLogic {
         }
     }
 
-    public void playGame(char player){
-        char computer =  validSelection.charAt(random.nextInt(validSelection.length()));
-
-        System.out.println("Game: " + gamePlayed + " | Player choice : Computer Choice => " + player + " : " + computer);
-
-        Result result = checkGame(player,computer);
-
+    public void playGame(Result result){
         switch (result){
             case WIN :
                 System.out.println("Win!");
