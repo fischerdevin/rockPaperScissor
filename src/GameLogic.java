@@ -2,7 +2,7 @@ public class GameLogic {
     private int gamePlayed, totalRounds, wins, losses, draws;
 
     public enum Selection {
-        ROCK, PAPER, SISSORS
+        ROCK, PAPER, SCISSORS
     }
 
     public enum Result {
@@ -39,8 +39,8 @@ public class GameLogic {
         }
         
         if (player == Selection.PAPER && opponent == Selection.ROCK
-                || player == Selection.ROCK && opponent == Selection.SISSORS
-                || player == Selection.SISSORS && opponent == Selection.PAPER) {
+                || player == Selection.ROCK && opponent == Selection.SCISSORS
+                || player == Selection.SCISSORS && opponent == Selection.PAPER) {
                     
             return Result.WIN;
         }

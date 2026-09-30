@@ -45,7 +45,7 @@ public class Main {
             case 'P':
                 return GameLogic.Selection.PAPER;
             case 'S':
-                return GameLogic.Selection.SISSORS;
+                return GameLogic.Selection.SCISSORS;
             default: 
                 throw new IllegalArgumentException("Invalid selection: " + input);
         }
