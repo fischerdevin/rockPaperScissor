@@ -1,7 +1,11 @@
 public class GameLogic {
     private int gamePlayed, totalRounds, wins, losses, draws;
-    private final String validSelection = "RPS";
-    public enum Result{
+
+    public enum Selection {
+        ROCK, PAPER, SCISSORS
+    }
+
+    public enum Result {
         WIN, LOSS, DRAW
     }
 
@@ -27,46 +31,56 @@ public class GameLogic {
     public int getTotalRounds(){
         return this.totalRounds;
     }
-    public boolean isValid(char check){
-        return validSelection.indexOf(check) != -1;
-    }
 
-    public Result checkGame(char player, char computer){
-        if (player == computer) {
+    public Result determineOutcome(Selection player, Selection opponent){
+
+        if (player == opponent) {
             return Result.DRAW;
-        } else if (player == 'P' && computer == 'R'
-                || player == 'R' && computer == 'S'
-                || player == 'S' && computer == 'P') {
-            return Result.WIN;
-        } else {
-            return Result.LOSS;
         }
+        
+        if (player == Selection.PAPER && opponent == Selection.ROCK
+                || player == Selection.ROCK && opponent == Selection.SCISSORS
+                || player == Selection.SCISSORS && opponent == Selection.PAPER) {
+                    
+            return Result.WIN;
+        }
+        
+        return Result.LOSS;
+
     }
 
-    public void playGame(Result result){
+    public void playRound(Selection player, Selection opponent){
+
+        System.out.println("Game: " + getGamesPlayed() + " | Player choice : Computer Choice => " + player + " : " + opponent);
+
+        Result result = determineOutcome(player, opponent);
+
         switch (result){
             case WIN :
                 System.out.println("Win!");
                 wins++;
                 break;
+
             case LOSS:
                 System.out.println("Loss!");
                 losses++;
                 break;
+
             case DRAW:
                 System.out.println("Draw!");
                 draws++;
                 break;
         }
-        gameStats();
+
+        printGameStats();
         gamePlayed++;
     }
 
-    public void gameStats(){
-        System.out.println("Game: " + this.gamePlayed + " | Results (Wins ,Losses ,Draws ): (" + this.wins + ", " + this.losses + ", " + this.draws + ")\n");
+    public void printGameStats(){
+        System.out.println("Results (Wins, Losses, Draws ): (" + this.wins + ", " + this.losses + ", " + this.draws + ")\n");
     }
-    public void endGameStats(){
+    public void printEndGameStats(){
         System.out.println("\nEnd of the Rounds Stats: ");
-        System.out.println("Total games played: "+ (this.gamePlayed - 1) + " | Results (Wins, Losses, Draws ): ("+ this.wins + ", " + this.losses + ", " + this.draws +")\n");
+        System.out.println("Total games played: "+ (this.gamePlayed - 1) + " | Results (Wins, Losses, Draws): ("+ this.wins + ", " + this.losses + ", " + this.draws +")\n");
     }
 }
