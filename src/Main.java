@@ -7,34 +7,53 @@ public class Main {
 
 
         Testing testing = new Testing();
-//        testing.testEveryPossibleValid();
+        testing.testEveryPossibleValid();
 
 
-        char playerSelection,computerSelection;
-
+        char playerSelectionChar;
+        GameLogic.Selection playerSelection, computerSelection;
 
         while (gameLogic.getGamesPlayed() <= gameLogic.getTotalRounds()) {
+
             do {
                 System.out.print("Choose: Rock (R/r), Paper (P/p), Scissor (S/s) => ");
-                playerSelection = scnr.next().toUpperCase().charAt(0);
+                playerSelectionChar = scnr.next().toUpperCase().charAt(0);
 
-                if (!gameLogic.isValid(playerSelection)) {
+                if (!isValidSelection(playerSelectionChar)) {
                     System.out.println("\nInvalid Selection: Select Again");
                 }
-            } while (!gameLogic.isValid(playerSelection));
 
+            } while (!isValidSelection(playerSelectionChar));
+
+            playerSelection = charToSelection(playerSelectionChar);
             computerSelection = computer.computerSelection();
-            GameLogic.Result result = gameLogic.checkGame(playerSelection,computerSelection);
-            System.out.println("Game: " + gameLogic.getGamesPlayed() + " | Player choice : Computer Choice => " + playerSelection + " : " + computerSelection);
+            gameLogic.playRound(playerSelection, computerSelection);
 
-
-            gameLogic.playGame(result);
-
-
-            if (gameLogic.getGamesPlayed() > gameLogic.getTotalRounds()) {
-                gameLogic.endGameStats();
-            }
         }
+
+        gameLogic.printEndGameStats();
+    }
+
+    public static GameLogic.Selection charToSelection(char input) {
+
+        assert(isValidSelection(input));
+
+        switch (Character.toUpperCase(input)) {
+
+            case 'R':
+                return GameLogic.Selection.ROCK;
+            case 'P':
+                return GameLogic.Selection.PAPER;
+            case 'S':
+                return GameLogic.Selection.SISSORS;
+            default: 
+                throw new IllegalArgumentException("Invalid selection: " + input);
+        }
+
+    }
+
+    public static boolean isValidSelection(char input) {
+        return input == 'R' || input == 'P' || input == 'S'; 
     }
 
 }
