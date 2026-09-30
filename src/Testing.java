@@ -2,10 +2,10 @@ public class Testing {
     private final GameLogic testGL = new GameLogic();
 
 
-    public boolean testLogic(GameLogic.Selection player, GameLogic.Selection computer, GameLogic.Result expected) {
+    public boolean testLogic(GameLogic.Selection player, GameLogic.Selection computer, GameLogic.Result possibleOutcomes) {
         GameLogic.Result actual = testGL.determineOutcome(player, computer);
 
-        return actual == expected;
+        return actual == possibleOutcomes;
     }
 
     public void testEveryPossibleValid(){
@@ -16,10 +16,10 @@ public class Testing {
 
                GameLogic.Result actual = testGL.determineOutcome(player, computer);
 
-               for(GameLogic.Result expected : GameLogic.Result.values()){
+               for(GameLogic.Result possibleOutcomes : GameLogic.Result.values()){
 
-                   boolean passed = testLogic(player, computer, expected);
-                   System.out.println(player + " : " + computer + " | Expected: " + expected + " | Actual: " + actual + " | Match: " + passed);
+                   boolean passed = testLogic(player, computer, possibleOutcomes);
+                   System.out.println(player + " : " + computer + " | Possible Outcome: " + possibleOutcomes + " | Actual Outcome: " + actual + " | Match: " + passed);
 
                }
 
