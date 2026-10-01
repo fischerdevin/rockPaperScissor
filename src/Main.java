@@ -6,9 +6,12 @@ public class Main {
         Computer computer = new Computer();
 
 
+        /*
+        Testing for Logic
+
         Testing testing = new Testing();
         testing.testEveryPossibleValid();
-
+        */
 
         char playerSelectionChar;
         GameLogic.Selection playerSelection, computerSelection;
