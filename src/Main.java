@@ -5,7 +5,6 @@ public class Main {
         GameLogic gameLogic = new GameLogic();
         Computer computer = new Computer();
 
-
         /*
         Testing for Logic
 
