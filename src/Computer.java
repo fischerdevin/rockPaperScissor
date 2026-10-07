@@ -1,15 +1,17 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
 
 public class Computer {
 
     private final Random random = new Random();
     private final Queue<GameLogic.Selection> roundHistory = new LinkedList<>();
-    private final Map<ArrayList<GameLogic.Selection>, Integer> roundMemoryMap = new HashMap<>();    // stores the frequency of each past sequence of moves
+    private final Map<ArrayList<GameLogic.Selection>, Integer> roundMemory = new HashMap<>();    // stores the frequency of each past sequence of moves
     private final int roundHistoryCapacity;
 
     public enum Difficulty {
@@ -41,6 +43,53 @@ public class Computer {
 
     public GameLogic.Selection computerSelection(){
 
+        if (roundHistory.size() == roundHistoryCapacity) {
+
+            ArrayList<GameLogic.Selection> currentHistory = new ArrayList<>();
+
+            // Generates an array for the last n - 1 rounds
+            boolean skipFirst = true;
+            for (GameLogic.Selection i : roundHistory) {
+
+                if (skipFirst) {
+                    skipFirst = false;
+                } else {
+                    currentHistory.add(i);
+                } 
+            }
+            
+            // The memory map is used to determine the closest matches from previous matches
+            Set<ArrayList<GameLogic.Selection>> candidates = new HashSet<>();
+
+            for (ArrayList<GameLogic.Selection> i : roundMemory.keySet()) {
+                if ( i.subList(0, currentHistory.size()).equals(currentHistory) ) {
+                    candidates.add(i);
+                }
+            }
+
+            if (!candidates.isEmpty()) {
+
+                // Based on the set of canidates, find the one with the largest frequency
+                int maxFrequency = 0;
+                GameLogic.Selection predictedSelection = null;
+
+                for (ArrayList<GameLogic.Selection> i : candidates) {
+
+                    System.out.println("\n");
+
+                    if ( roundMemory.get(i) > maxFrequency ) {
+                        maxFrequency = roundMemory.get(i);
+                        predictedSelection = i.getLast();
+                    }
+                }
+
+                return predictedSelection.next();
+
+            }
+
+        }
+
+        // If no matching candidates are found, or if history is not large enough, fall back to random number generator
         GameLogic.Selection[] possibleSelections = GameLogic.Selection.values();
         return possibleSelections[random.nextInt(3)];
 
@@ -60,10 +109,14 @@ public class Computer {
                 currentHistory.add(i);
             }
 
-            roundMemoryMap.put(currentHistory, roundMemoryMap.get(currentHistory));
+            // Increment round memory
+            if (roundMemory.containsKey(currentHistory)) {
+                roundMemory.put(currentHistory, roundMemory.get(currentHistory) + 1);
+            } else {
+                roundMemory.put(currentHistory, 1);
+            }
         }
 
     }
-
 
 }

@@ -30,10 +30,12 @@ public class Main {
             playerSelection = charToSelection(playerSelectionChar);
             computerSelection = computer.computerSelection();
             gameLogic.playRound(playerSelection, computerSelection);
+            computer.addToMemory(playerSelection);
 
         }
 
         gameLogic.printEndGameStats();
+
     }
 
     public static GameLogic.Selection charToSelection(char input) {
