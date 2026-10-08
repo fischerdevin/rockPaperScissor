@@ -2,7 +2,11 @@ public class GameLogic {
     private int gamePlayed, totalRounds, wins, losses, draws;
 
     public enum Selection {
-        ROCK, PAPER, SCISSORS
+        ROCK, PAPER, SCISSORS;
+
+        public Selection next() {   // guaranteed to return dominant selection
+            return values()[(this.ordinal() + 1) % values().length];
+        }
     }
 
     public enum Result {
@@ -11,7 +15,7 @@ public class GameLogic {
 
     public GameLogic(){
         gamePlayed = 1;
-        totalRounds = 20;
+        totalRounds = 100;
         wins = 0;
         losses = 0;
         draws = 0;

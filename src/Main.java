@@ -3,8 +3,24 @@ public class Main {
     public static void main(String[] args) {
         Scanner scnr = new Scanner(System.in);
         GameLogic gameLogic = new GameLogic();
-        Computer computer = new Computer();
+        Computer computer = null;
 
+        char computerType;
+        do {
+
+            System.out.print("Choose Opponent: Machine Learning (M) or Random Selection (R) => ");
+            computerType = scnr.next().toUpperCase().charAt(0);
+
+            if (computerType == 'M') {
+                computer = new ComputerML();
+                System.out.println("Machine Learning Opponent Chosen\n");
+
+            } else if (computerType == 'R') {
+                computer = new ComputerRandom();
+                System.out.println("Random Selection Opponent Chosen\n");
+            }
+
+        } while (computerType != 'M' && computerType != 'R');
 
         /*
         Testing for Logic
@@ -31,10 +47,12 @@ public class Main {
             playerSelection = charToSelection(playerSelectionChar);
             computerSelection = computer.computerSelection();
             gameLogic.playRound(playerSelection, computerSelection);
+            computer.addToMemory(playerSelection);
 
         }
 
         gameLogic.printEndGameStats();
+
     }
 
     public static GameLogic.Selection charToSelection(char input) {
