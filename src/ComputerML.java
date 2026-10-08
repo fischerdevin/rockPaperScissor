@@ -1,8 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -114,10 +110,13 @@ public class ComputerML implements Computer {
     }
 
     private void importCurrentRoundHistory(String fileName) {
+        File memoryFile = new File(fileName);
 
-        try (FileReader fr = new FileReader(fileName);
-             BufferedReader br = new BufferedReader(fr)) {
+        if (!memoryFile.exists()) {
+            return; // No saved history yet
+        }
 
+        try (BufferedReader br = new BufferedReader(new FileReader(memoryFile))) {
             String line;
             while ((line = br.readLine()) != null) {
                 
