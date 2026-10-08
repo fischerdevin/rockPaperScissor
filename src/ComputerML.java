@@ -1,3 +1,8 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,10 +14,11 @@ import java.util.Set;
 
 public class ComputerML implements Computer {
 
+    private final String memoryFileName = "computer-ml-memory.txt";
     private final Random random = new Random();
     private final Queue<GameLogic.Selection> roundHistory = new LinkedList<>();
     private final Map<ArrayList<GameLogic.Selection>, Integer> roundMemory = new HashMap<>();    // stores the frequency of each past sequence of moves
-    private final int roundHistoryCapacity;
+    private final int roundHistoryCapacity = 5;
 
     public enum Difficulty {
         EASY,
@@ -21,24 +27,7 @@ public class ComputerML implements Computer {
     }
 
     ComputerML() {
-        this(Difficulty.MEDIUM);
-    }
-
-    ComputerML(Difficulty difficulty) {
-        switch (difficulty) {
-            case EASY:
-                roundHistoryCapacity = 3;
-                break;
-            case MEDIUM:
-                roundHistoryCapacity = 5;
-                break;
-            case HARD:
-                roundHistoryCapacity = 7;
-                break;
-            default:    // never occurs, but compiler freaks out without it
-                roundHistoryCapacity = 0;
-                break;
-        }
+        importCurrentRoundHistory(memoryFileName);
     }
 
     @Override
@@ -83,7 +72,6 @@ public class ComputerML implements Computer {
                         predictedSelection = i.getLast();
                     }
                 }
-
                 return predictedSelection.next();
 
             }
@@ -104,10 +92,11 @@ public class ComputerML implements Computer {
 
         // If round history is beyond max capacity, pop and add current history to memory map
         if (roundHistory.size() > roundHistoryCapacity) {
-
+            
             roundHistory.remove();
 
             ArrayList<GameLogic.Selection> currentHistory = new ArrayList<>();
+            
             for (GameLogic.Selection i : roundHistory) {
                 currentHistory.add(i);
             }
@@ -118,6 +107,60 @@ public class ComputerML implements Computer {
             } else {
                 roundMemory.put(currentHistory, 1);
             }
+
+            exportCurrentRoundHistory(memoryFileName, currentHistory);
+        }
+
+    }
+
+    private void importCurrentRoundHistory(String fileName) {
+
+        try (FileReader fr = new FileReader(fileName);
+             BufferedReader br = new BufferedReader(fr)) {
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                
+                String[] historyStringArray = line.split(",");
+                ArrayList<GameLogic.Selection> currentHistory = new ArrayList<>();
+
+                for (String i : historyStringArray) {
+                    currentHistory.add(GameLogic.Selection.valueOf(i));
+                }
+
+                // Increment round memory
+                if (roundMemory.containsKey(currentHistory)) {
+                    roundMemory.put(currentHistory, roundMemory.get(currentHistory) + 1);
+                } else {
+                    roundMemory.put(currentHistory, 1);
+                }
+                
+            }
+            
+        } catch (IOException e) {
+            // Convert to unchecked exception to keep method signatures clean
+            throw new RuntimeException("Error reading memory file stream", e);
+        }
+
+    }
+
+    private void exportCurrentRoundHistory(String fileName, ArrayList<GameLogic.Selection> currentHistory) {
+
+        try (FileWriter fw = new FileWriter(fileName, true);
+             PrintWriter writer = new PrintWriter(fw)) {
+
+            String output = "";
+            for (GameLogic.Selection i : currentHistory) {
+                output += (i + ",");
+            }
+            output = output.substring(0, output.length() - 1);
+            
+            writer.println(output);
+            writer.close();
+
+        } catch (IOException e) {
+            System.out.println("Error: Could not create or open machine-learning memory file");
+            throw new RuntimeException("Error: Could not create or open machine-learning memory file");
         }
 
     }

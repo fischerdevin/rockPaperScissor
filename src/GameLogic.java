@@ -15,7 +15,7 @@ public class GameLogic {
 
     public GameLogic(){
         gamePlayed = 1;
-        totalRounds = 100;
+        totalRounds = 20;
         wins = 0;
         losses = 0;
         draws = 0;
