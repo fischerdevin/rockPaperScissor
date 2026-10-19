@@ -53,38 +53,28 @@ public class GameLogic {
 
     }
 
-    public void playRound(Selection player, Selection opponent){
-
-        System.out.println("Game: " + getGamesPlayed() + " | Player choice : Computer Choice => " + player + " : " + opponent);
-
+    public Result playRound(Selection player, Selection opponent){
         Result result = determineOutcome(player, opponent);
 
         switch (result){
             case WIN :
-                System.out.println("Win!");
                 wins++;
                 break;
 
             case LOSS:
-                System.out.println("Loss!");
                 losses++;
                 break;
 
             case DRAW:
-                System.out.println("Draw!");
                 draws++;
                 break;
         }
 
-        printGameStats();
         gamePlayed++;
+        return result;
     }
 
-    public void printGameStats(){
-        System.out.println("Results (Wins, Losses, Draws ): (" + this.wins + ", " + this.losses + ", " + this.draws + ")\n");
-    }
-    public void printEndGameStats(){
-        System.out.println("\nEnd of the Rounds Stats: ");
-        System.out.println("Total games played: "+ (this.gamePlayed - 1) + " | Results (Wins, Losses, Draws): ("+ this.wins + ", " + this.losses + ", " + this.draws +")\n");
-    }
+    public int getWins() { return wins; }
+    public int getLosses() { return losses; }
+    public int getDraws() { return draws; }
 }

@@ -12,8 +12,4 @@ public class ComputerRandom implements Computer {
 
     }
 
-    // ComputerRandom doesn't need a memory, but many other computer types will
-    @Override
-    public void addToMemory(GameLogic.Selection selection) {}
-
 }

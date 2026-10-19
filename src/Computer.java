@@ -1,6 +1,13 @@
 public interface Computer {
 
-    public GameLogic.Selection computerSelection();
-    public void addToMemory(GameLogic.Selection selection);
+    GameLogic.Selection computerSelection();
+
+    default void recordRound(GameLogic.Selection player, GameLogic.Selection computer) {
+        addToMemory(player);
+    }
+
+    default void addToMemory(GameLogic.Selection selection) {}
+
+    default void saveMemory() {}
 
 }
