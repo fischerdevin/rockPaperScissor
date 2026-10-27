@@ -23,7 +23,7 @@ public class GameLogic {
 
     public GameLogic(int totalRounds){
         gamePlayed = 1;
-        this.totalRounds = totalRounds;
+        this.totalRounds = Math.max(1, totalRounds);
         wins = 0;
         losses = 0;
         draws = 0;
@@ -34,6 +34,10 @@ public class GameLogic {
     }
     public int getTotalRounds(){
         return this.totalRounds;
+    }
+
+    public boolean isComplete() {
+        return gamePlayed > totalRounds;
     }
 
     public Result determineOutcome(Selection player, Selection opponent){
@@ -53,38 +57,28 @@ public class GameLogic {
 
     }
 
-    public void playRound(Selection player, Selection opponent){
-
-        System.out.println("Game: " + getGamesPlayed() + " | Player choice : Computer Choice => " + player + " : " + opponent);
-
+    public Result playRound(Selection player, Selection opponent){
         Result result = determineOutcome(player, opponent);
 
         switch (result){
             case WIN :
-                System.out.println("Win!");
                 wins++;
                 break;
 
             case LOSS:
-                System.out.println("Loss!");
                 losses++;
                 break;
 
             case DRAW:
-                System.out.println("Draw!");
                 draws++;
                 break;
         }
 
-        printGameStats();
         gamePlayed++;
+        return result;
     }
 
-    public void printGameStats(){
-        System.out.println("Results (Wins, Losses, Draws ): (" + this.wins + ", " + this.losses + ", " + this.draws + ")\n");
-    }
-    public void printEndGameStats(){
-        System.out.println("\nEnd of the Rounds Stats: ");
-        System.out.println("Total games played: "+ (this.gamePlayed - 1) + " | Results (Wins, Losses, Draws): ("+ this.wins + ", " + this.losses + ", " + this.draws +")\n");
-    }
+    public int getWins() { return wins; }
+    public int getLosses() { return losses; }
+    public int getDraws() { return draws; }
 }
