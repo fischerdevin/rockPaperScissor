@@ -23,7 +23,7 @@ public class GameLogic {
 
     public GameLogic(int totalRounds){
         gamePlayed = 1;
-        this.totalRounds = totalRounds;
+        this.totalRounds = Math.max(1, totalRounds);
         wins = 0;
         losses = 0;
         draws = 0;
@@ -34,6 +34,10 @@ public class GameLogic {
     }
     public int getTotalRounds(){
         return this.totalRounds;
+    }
+
+    public boolean isComplete() {
+        return gamePlayed > totalRounds;
     }
 
     public Result determineOutcome(Selection player, Selection opponent){

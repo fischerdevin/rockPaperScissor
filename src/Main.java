@@ -1,10 +1,8 @@
-import java.util.Scanner;
+import javafx.application.Application;
 
 public class Main {
     public static void main(String[] args) {
-        PlayerInput input = new PlayerInput(new Scanner(System.in));
-        Computer computer = input.chooseComputer();
-        new GameRunner(new GameLogic(), input, computer).play();
+        Application.launch(RpsApplication.class, args);
     }
 
     public static GameLogic.Selection charToSelection(char input) {

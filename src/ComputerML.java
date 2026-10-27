@@ -32,30 +32,38 @@ public class ComputerML implements Computer {
 
     @Override
     public GameLogic.Selection computerSelection() {
-        if (difficulty != Difficulty.EASY && recentMoves.size() >= HISTORY_LENGTH - 1) {
-            List<GameLogic.Selection> prefix = new ArrayList<>(recentMoves);
-            List<GameLogic.Selection> bestSequence = null;
-            int bestFrequency = -1;
-
-            for (Map.Entry<List<GameLogic.Selection>, Integer> entry : roundMemory.entrySet()) {
-                List<GameLogic.Selection> sequence = entry.getKey();
-                if (sequence.size() == HISTORY_LENGTH
-                        && sequence.subList(0, prefix.size()).equals(prefix)
-                        && (entry.getValue() > bestFrequency
-                        || (entry.getValue() == bestFrequency
-                        && isEarlier(sequence, bestSequence)))) {
-                    bestSequence = sequence;
-                    bestFrequency = entry.getValue();
-                }
-            }
-
-            if (bestSequence != null) {
-                return bestSequence.get(HISTORY_LENGTH - 1).next();
-            }
+        GameLogic.Selection prediction = predictedHumanSelection();
+        if (prediction != null) {
+            return prediction.next();
         }
 
         GameLogic.Selection[] choices = GameLogic.Selection.values();
         return choices[random.nextInt(choices.length)];
+    }
+
+    @Override
+    public GameLogic.Selection predictedHumanSelection() {
+        if (difficulty == Difficulty.EASY || recentMoves.size() < HISTORY_LENGTH - 1) {
+            return null;
+        }
+
+        List<GameLogic.Selection> prefix = new ArrayList<>(recentMoves);
+        List<GameLogic.Selection> bestSequence = null;
+        int bestFrequency = -1;
+
+        for (Map.Entry<List<GameLogic.Selection>, Integer> entry : roundMemory.entrySet()) {
+            List<GameLogic.Selection> sequence = entry.getKey();
+            if (sequence.size() == HISTORY_LENGTH
+                    && sequence.subList(0, prefix.size()).equals(prefix)
+                    && (entry.getValue() > bestFrequency
+                    || (entry.getValue() == bestFrequency
+                    && isEarlier(sequence, bestSequence)))) {
+                bestSequence = sequence;
+                bestFrequency = entry.getValue();
+            }
+        }
+
+        return bestSequence == null ? null : bestSequence.get(HISTORY_LENGTH - 1);
     }
 
     @Override
